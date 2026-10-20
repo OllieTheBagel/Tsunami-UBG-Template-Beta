@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tsunami UBG | HTML Games Showcase</title>
+  
+  <style>
+    /* ==========================================================================
+       TSUNAMI UBG - OCEAN DESIGN SYSTEM & THEME VARIABLES
+       ========================================================================== */
+    :root {
+      --bg-dark: #040914;
+      --bg-navy: #0a1428;
+      --bg-card: rgba(12, 26, 50, 0.65);
+      --bg-card-hover: rgba(18, 38, 72, 0.85);
+      --glass-border: rgba(0, 242, 254, 0.18);
+      --glass-border-glow: rgba(0, 242, 254, 0.5);
+      
+      --cyan-bright: #00f2fe;
+      --aqua-blue: #4facfe;
+      --ocean-deep: #003366;
+      --water-pale: #e0f7fa;
+      
+      --text-main: #f0f8ff;
+      --text-muted: #8aa4ca;
+      --accent-glow: 0 0 25px rgba(0, 242, 254, 0.35);
+      --card-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+      
+      --font-family: 'Comic Sans MS', 'Comic Sans', cursive, sans-serif;
+      --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(0, 242, 254, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(79, 172, 254, 0.05) 0%, transparent 40%);
+    }
+
+    /* ==========================================================================
+       1. NAVIGATION BAR
+       ========================================================================== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(4, 9, 20, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 800;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+    }
+
+    .nav-brand-logo {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--cyan-bright), var(--aqua-blue));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--accent-glow);
+    }
+
+    .nav-brand-logo svg {
+      width: 22px;
+      height: 22px;
+      fill: var(--bg-dark);
+    }
+
+    .nav-brand-text {
+      background: linear-gradient(90deg, #ffffff, var(--cyan-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 12px rgba(0, 242, 254, 0.3);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 8px;
+      transition: var(--transition-smooth);
+      cursor: pointer;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--cyan-bright);
+      background: rgba(0, 242, 254, 0.08);
+    }
+
+    .nav-search {
+      position: relative;
+      width: 240px;
+    }
+
+    .nav-search input {
+      width: 100%;
+      padding: 8px 14px 8px 36px;
+      background: rgba(10, 20, 40, 0.8);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      color: var(--text-main);
+      font-family: var(--font-family);
+      font-size: 0.88rem;
+      outline: none;
+      transition: var(--transition-smooth);
+    }
+
+    .nav-search input:focus {
+      border-color: var(--cyan-bright);
+      box-shadow: var(--accent-glow);
+      width: 280px;
+    }
+
+    .nav-search svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+      pointer-events: none;
+    }
+
+    /* ==========================================================================
+       2. HERO SECTION WITH CANVAS WAVE ANIMATION
+       ========================================================================== */
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 65vh;
+      min-height: 420px;
+      max-height: 600px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid var(--glass-border);
+      background: linear-gradient(180deg, #020612 0%, #081830 100%);
+    }
+
+    #wave-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(4, 9, 20, 0.2) 0%, rgba(4, 9, 20, 0.75) 100%);
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 800px;
+    }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 5.2rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 
+        0 0 10px rgba(0, 242, 254, 0.8),
+        0 0 25px rgba(0, 242, 254, 0.5),
+        0 0 50px rgba(79, 172, 254, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+      -webkit-text-stroke: 1px rgba(224, 247, 250, 0.6);
+      margin-bottom: 12px;
+      animation: pulseGlow 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { text-shadow: 0 0 10px rgba(0, 242, 254, 0.6), 0 0 20px rgba(0, 242, 254, 0.3); }
+      100% { text-shadow: 0 0 20px rgba(0, 242, 254, 0.9), 0 0 40px rgba(79, 172, 254, 0.7); }
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      color: var(--water-pale);
+      letter-spacing: 1.5px;
+      margin-bottom: 28px;
+      font-weight: 300;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+    }
+
+    .hero-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 32px;
+      background: linear-gradient(135deg, var(--cyan-bright), var(--aqua-blue));
+      color: var(--bg-dark);
+      font-family: var(--font-family);
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-decoration: none;
+      border-radius: 30px;
+      box-shadow: var(--accent-glow), 0 8px 20px rgba(0,0,0,0.4);
+      transition: var(--transition-smooth);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 0 35px rgba(0, 242, 254, 0.85);
+      background: linear-gradient(135deg, #26f5ff, #62b5fe);
+    }
+
+    /* ==========================================================================
+       3. MAIN LAYOUT & CONTROLS
+       ========================================================================== */
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      flex: 1;
+      width: 100%;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 22px;
+      background: var(--cyan-bright);
+      border-radius: 2px;
+      box-shadow: var(--accent-glow);
+    }
+
+    .view-tabs {
+      display: flex;
+      gap: 12px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 24px;
+      padding-bottom: 8px;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font-family);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+    }
+
+    .tab-btn.active {
+      color: var(--cyan-bright);
+      background: rgba(0, 242, 254, 0.1);
+    }
+
+    /* ==========================================================================
+       4. CONTENT LIBRARY GRID & CARDS
+       ========================================================================== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-smooth);
+      position: relative;
+      box-shadow: var(--card-shadow);
+    }
+
+    .card:hover {
+      transform: translateY(-6px);
+      border-color: var(--glass-border-glow);
+      background: var(--bg-card-hover);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6), var(--accent-glow);
+    }
+
+    .card-thumbnail-wrapper {
+      position: relative;
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, #091a34, #002b4d);
+      overflow: hidden;
+    }
+
+    .card-thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover .card-thumbnail {
+      transform: scale(1.06);
+    }
+
+    .card-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle, #0d2a4a 0%, #051326 100%);
+      color: var(--cyan-bright);
+      opacity: 0.8;
+    }
+
+    .card-placeholder svg {
+      width: 48px;
+      height: 48px;
+      fill: currentColor;
+    }
+
+    .card-fav-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(4, 9, 20, 0.75);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(8px);
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition-smooth);
+    }
+
+    .card-fav-btn:hover, .card-fav-btn.is-favorite {
+      color: #ff4757;
+      border-color: rgba(255, 71, 87, 0.5);
+      background: rgba(4, 9, 20, 0.9);
+    }
+
+    .card-fav-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-description {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+      margin-bottom: 18px;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-play-btn {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 242, 254, 0.1);
+      border: 1px solid var(--glass-border);
+      color: var(--cyan-bright);
+      font-family: var(--font-family);
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transition-smooth);
+    }
+
+    .card-play-btn:hover {
+      background: var(--cyan-bright);
+      color: var(--bg-dark);
+      box-shadow: var(--accent-glow);
+    }
+
+    .card-play-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      background: var(--bg-card);
+      border: 1px dashed var(--glass-border);
+      border-radius: 16px;
+    }
+
+    .empty-state svg {
+      width: 60px;
+      height: 60px;
+      fill: var(--text-muted);
+      margin-bottom: 16px;
+      opacity: 0.6;
+    }
+
+    .empty-state h3 {
+      font-size: 1.25rem;
+      margin-bottom: 8px;
+    }
+
+    .empty-state p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ==========================================================================
+       5. PROJECT VIEWER (MODAL & IFRAME)
+       ========================================================================== */
+    .viewer-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(3, 7, 16, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .viewer-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .viewer-header {
+      padding: 12px 24px;
+      background: rgba(6, 15, 30, 0.9);
+      border-bottom: 1px solid var(--glass-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .viewer-title-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .viewer-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .viewer-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .viewer-btn {
+      background: rgba(15, 30, 55, 0.8);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      font-family: var(--font-family);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: var(--transition-smooth);
+    }
+
+    .viewer-btn:hover {
+      background: rgba(0, 242, 254, 0.2);
+      border-color: var(--cyan-bright);
+      color: var(--cyan-bright);
+    }
+
+    .viewer-btn.close-btn {
+      background: rgba(255, 71, 87, 0.15);
+      border-color: rgba(255, 71, 87, 0.3);
+      color: #ff4757;
+    }
+
+    .viewer-btn.close-btn:hover {
+      background: #ff4757;
+      color: #ffffff;
+    }
+
+    .viewer-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .viewer-body {
+      flex: 1;
+      position: relative;
+      width: 100%;
+      height: calc(100vh - 60px);
+      background: #000;
+    }
+
+    .viewer-iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #ffffff;
+    }
+
+    .viewer-error {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--bg-navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+      display: none;
+    }
+
+    .viewer-error svg {
+      width: 64px;
+      height: 64px;
+      fill: var(--cyan-bright);
+      margin-bottom: 16px;
+    }
+
+    .viewer-error h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+    }
+
+    .viewer-error p {
+      color: var(--text-muted);
+      max-width: 500px;
+      line-height: 1.5;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+
+    /* ==========================================================================
+       6. FOOTER
+       ========================================================================== */
+    .footer {
+      background: rgba(2, 6, 14, 0.95);
+      border-top: 1px solid var(--glass-border);
+      padding: 40px 24px 24px 24px;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .footer-brand h2 {
+      font-size: 1.3rem;
+      color: var(--cyan-bright);
+      margin-bottom: 8px;
+    }
+
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.88rem;
+      max-width: 320px;
+      line-height: 1.5;
+    }
+
+    .footer-links-group {
+      display: flex;
+      gap: 40px;
+    }
+
+    .footer-column h4 {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .footer-column ul {
+      list-style: none;
+    }
+
+    .footer-column li {
+      margin-bottom: 8px;
+    }
+
+    .footer-column a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      transition: var(--transition-smooth);
+    }
+
+    .footer-column a:hover {
+      color: var(--cyan-bright);
+    }
+
+    .footer-bottom {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 16px;
+      }
+      .nav-links {
+        display: none;
+      }
+      .nav-search {
+        width: 160px;
+      }
+      .nav-search input:focus {
+        width: 180px;
+      }
+      .hero-container {
+        height: 50vh;
+      }
+      .container {
+        padding: 24px 16px;
+      }
+      .view-tabs {
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <nav class="navbar">
+    <a href="#" class="nav-brand" onclick="switchTab('all')">
+      <!-- WAVE ART LOGO ICON -->
+      <div class="nav-brand-logo">
+        <svg viewBox="0 0 24 24">
+          <path d="M2 16.5c3 0 4.5-2 7.5-2s4.5 2 7.5 2 4.5-2 7-2v2.5c-2.5 0-4 2-7 2s-4.5-2-7.5-2-4.5 2-7.5 2H2v-3zm0-6c3 0 4.5-2 7.5-2s4.5 2 7.5 2 4.5-2 7-2v2.5c-2.5 0-4 2-7 2s-4.5-2-7.5-2-4.5 2-7.5 2H2v-3z"/>
+        </svg>
+      </div>
+      <span class="nav-brand-text">TSUNAMI UBG</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a class="nav-link active" onclick="switchTab('all')">Home</a></li>
+      <li><a class="nav-link" onclick="switchTab('all')">Games</a></li>
+      <li><a class="nav-link" onclick="switchTab('favorites')">Favorites</a></li>
+    </ul>
+
+    <div class="nav-search">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      <input type="text" id="searchInput" placeholder="Search games..." oninput="handleSearch()" />
+    </div>
+  </nav>
+
+  <!-- HERO SECTION WITH CANVAS WAVE ANIMATION -->
+  <header class="hero-container">
+    <canvas id="wave-canvas"></canvas>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-title">TSUNAMI UBG</h1>
+      <p class="hero-tagline">Dive Into Something Different</p>
+      <a href="#library" class="hero-btn">
+        <svg style="width:20px;height:20px;fill:currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        Explore Library
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="container" id="library">
+    
+    <div class="view-tabs">
+      <button class="tab-btn active" id="tab-all" onclick="switchTab('all')">
+        <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg>
+        All Games
+      </button>
+      <button class="tab-btn" id="tab-favorites" onclick="switchTab('favorites')">
+        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        Favorites (<span id="fav-count">0</span>)
+      </button>
+      <button class="tab-btn" id="tab-recent" onclick="switchTab('recent')">
+        <svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+        Recently Played
+      </button>
+    </div>
+
+    <div class="section-header">
+      <h2 class="section-title" id="sectionHeading">Games</h2>
+    </div>
+
+    <div class="grid" id="projectGrid"></div>
+
+  </main>
+
+  <!-- DEDICATED PROJECT VIEWER -->
+  <div class="viewer-modal" id="viewerModal">
+    <div class="viewer-header">
+      <div class="viewer-title-info">
+        <span class="viewer-title" id="viewerTitle">Game Title</span>
+      </div>
+
+      <div class="viewer-controls">
+        <button class="viewer-btn" onclick="reloadIframe()" title="Refresh Game">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          Reload
+        </button>
+        <button class="viewer-btn" onclick="toggleFullscreen()" title="Fullscreen Mode">
+          <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+          Fullscreen
+        </button>
+        <button class="viewer-btn close-btn" onclick="closeViewer()" title="Close Viewer">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          Close
+        </button>
+      </div>
+    </div>
+
+    <div class="viewer-body">
+      <iframe 
+        id="projectIframe" 
+        class="viewer-iframe" 
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+        allowfullscreen>
+      </iframe>
+
+      <div class="viewer-error" id="viewerError">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <h3>Unable to Load Game</h3>
+        <p>The requested file path could not be found or failed to load. Ensure you have uploaded the project folder to Cloudflare Pages and verified its catalog path entry in index.html.</p>
+        <button class="viewer-btn" onclick="closeViewer()">Return to Library</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <h2>TSUNAMI UBG</h2>
+        <p>A personal ocean-themed showcase for self-hosted HTML web games and experiences.</p>
+      </div>
+
+      <div class="footer-links-group">
+        <div class="footer-column">
+          <h4>Navigation</h4>
+          <ul>
+            <li><a href="#" onclick="switchTab('all')">All Games</a></li>
+            <li><a href="#" onclick="switchTab('favorites')">Favorites</a></li>
+            <li><a href="#" onclick="switchTab('recent')">Recently Played</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>Tsunami UBG &copy; Made by [A.P. and H.S.] Megacollab; Tsunami 2026</span>
+      <span>Hosted on Cloudflare Pages</span>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT APP LOGIC & OCEAN WAVE ENGINE -->
+  <script>
+    /* ==========================================================================
+       DYNAMIC CANVAS OCEAN WAVE BACKGROUND ANIMATION ENGINE
+       ========================================================================== */
+    const canvas = document.getElementById('wave-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = canvas.parentElement.offsetHeight;
+
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = canvas.parentElement.offsetHeight;
+    });
+
+    let step = 0;
+    const waves = [
+      { length: 0.008, amplitude: 25, speed: 0.02, color: 'rgba(0, 242, 254, 0.25)', offset: 0 },
+      { length: 0.005, amplitude: 35, speed: 0.015, color: 'rgba(79, 172, 254, 0.35)', offset: 50 },
+      { length: 0.003, amplitude: 45, speed: 0.01, color: 'rgba(0, 51, 102, 0.55)', offset: 100 }
+    ];
+
+    const bubbles = Array.from({ length: 45 }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 3 + 1,
+      speedY: Math.random() * 0.8 + 0.2,
+      opacity: Math.random() * 0.5 + 0.2
+    }));
+
+    function animateWaves() {
+      ctx.clearRect(0, 0, width, height);
+      step += 1;
+
+      bubbles.forEach(b => {
+        b.y -= b.speedY;
+        if (b.y < 0) {
+          b.y = height;
+          b.x = Math.random() * width;
+        }
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(224, 247, 250, ${b.opacity})`;
+        ctx.fill();
+      });
+
+      waves.forEach(w => {
+        ctx.beginPath();
+        ctx.moveTo(0, height);
+        for (let x = 0; x <= width; x += 5) {
+          const y = Math.sin(x * w.length + step * w.speed) * w.amplitude + (height / 2) + w.offset;
+          ctx.lineTo(x, y);
+        }
+        ctx.lineTo(width, height);
+        ctx.closePath();
+        ctx.fillStyle = w.color;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animateWaves);
+    }
+    animateWaves();
+
+    /* ==========================================================================
+       CONTENT CATALOG & LIBRARY STATE
+       ========================================================================== 
+       Add your uploaded HTML game entries below! Example structure:
+       {
+         id: "my-game-id",
+         title: "My Custom Game",
+         description: "A fun HTML game description.",
+         thumbnail: "thumbnails/my-game.webp",
+         file: "uploads/my-game/index.html"
+       }
+       ========================================================================== */
+    const CONTENT_CATALOG = [];
+
+    let currentTab = 'all';
+    let searchQuery = '';
+    let favorites = JSON.parse(localStorage.getItem('tsunami_favorites') || '[]');
+    let recentProjects = JSON.parse(localStorage.getItem('tsunami_recent') || '[]');
+
+    const projectGrid = document.getElementById('projectGrid');
+    const searchInput = document.getElementById('searchInput');
+    const favCountEl = document.getElementById('fav-count');
+    const sectionHeading = document.getElementById('sectionHeading');
+    const viewerModal = document.getElementById('viewerModal');
+    const projectIframe = document.getElementById('projectIframe');
+    const viewerTitle = document.getElementById('viewerTitle');
+    const viewerError = document.getElementById('viewerError');
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateFavCount();
+      renderLibrary();
+    });
+
+    function renderLibrary() {
+      projectGrid.innerHTML = '';
+      let items = CONTENT_CATALOG;
+
+      if (currentTab === 'favorites') {
+        items = items.filter(item => favorites.includes(item.id));
+        sectionHeading.textContent = 'Favorite Games';
+      } else if (currentTab === 'recent') {
+        items = recentProjects.map(id => CONTENT_CATALOG.find(item => item.id === id)).filter(Boolean);
+        sectionHeading.textContent = 'Recently Played';
+      } else {
+        sectionHeading.textContent = 'Games';
+      }
+
+      if (searchQuery.trim() !== '') {
+        const query = searchQuery.toLowerCase();
+        items = items.filter(item => 
+          item.title.toLowerCase().includes(query) || 
+          item.description.toLowerCase().includes(query)
+        );
+      }
+
+      if (items.length === 0) {
+        projectGrid.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+            <h3>No Games Found</h3>
+            <p>Add new game entries to the CONTENT_CATALOG array inside index.html to show them here!</p>
+          </div>
+        `;
+        return;
+      }
+
+      items.forEach(project => {
+        const isFav = favorites.includes(project.id);
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const thumbnailHTML = project.thumbnail ? `
+          <img src="${project.thumbnail}" alt="${project.title}" class="card-thumbnail" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="card-placeholder" style="display:none;">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+          </div>
+        ` : `
+          <div class="card-placeholder">
+            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+          </div>
+        `;
+
+        card.innerHTML = `
+          <div class="card-thumbnail-wrapper">
+            ${thumbnailHTML}
+            <button class="card-fav-btn ${isFav ? 'is-favorite' : ''}" onclick="toggleFavorite(event, '${project.id}')" title="Toggle Favorite">
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </button>
+          </div>
+          <div class="card-body">
+            <h3 class="card-title">${project.title}</h3>
+            <p class="card-description">${project.description}</p>
+            <div class="card-footer">
+              <button class="card-play-btn" onclick="openProject('${project.id}')">
+                <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                Play Game
+              </button>
+            </div>
+          </div>
+        `;
+
+        projectGrid.appendChild(card);
+      });
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeTabBtn = document.getElementById(`tab-${tab}`);
+      if (activeTabBtn) activeTabBtn.classList.add('active');
+
+      renderLibrary();
+    }
+
+    function handleSearch() {
+      searchQuery = searchInput.value;
+      renderLibrary();
+    }
+
+    function toggleFavorite(event, projectId) {
+      event.stopPropagation();
+      if (favorites.includes(projectId)) {
+        favorites = favorites.filter(id => id !== projectId);
+      } else {
+        favorites.push(projectId);
+      }
+      localStorage.setItem('tsunami_favorites', JSON.stringify(favorites));
+      updateFavCount();
+      renderLibrary();
+    }
+
+    function updateFavCount() {
+      favCountEl.textContent = favorites.length;
+    }
+
+    function trackRecent(projectId) {
+      recentProjects = recentProjects.filter(id => id !== projectId);
+      recentProjects.unshift(projectId);
+      if (recentProjects.length > 12) recentProjects.pop();
+      localStorage.setItem('tsunami_recent', JSON.stringify(recentProjects));
+    }
+
+    function openProject(projectId) {
+      const project = CONTENT_CATALOG.find(p => p.id === projectId);
+      if (!project) return;
+
+      trackRecent(projectId);
+
+      viewerTitle.textContent = project.title;
+      viewerError.style.display = 'none';
+      projectIframe.style.display = 'block';
+
+      projectIframe.src = project.file;
+
+      projectIframe.onerror = () => {
+        showIframeError();
+      };
+
+      viewerModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeViewer() {
+      viewerModal.classList.remove('active');
+      projectIframe.src = 'about:blank';
+      document.body.style.overflow = 'auto';
+    }
+
+    function reloadIframe() {
+      viewerError.style.display = 'none';
+      projectIframe.style.display = 'block';
+      const currentSrc = projectIframe.src;
+      projectIframe.src = 'about:blank';
+      setTimeout(() => {
+        projectIframe.src = currentSrc;
+      }, 50);
+    }
+
+    function showIframeError() {
+      projectIframe.style.display = 'none';
+      viewerError.style.display = 'flex';
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        viewerModal.requestFullscreen().catch(err => {
+          alert(`Fullscreen error: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
